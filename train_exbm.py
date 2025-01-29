@@ -61,7 +61,7 @@ def train(model, data_loader, optimizer, epoch, device, config):
     header = "Train Epoch: [{}]".format(epoch)
     print_freq = 10
     data_loader.sampler.set_epoch(epoch)
-    for i, (image, label) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
+    for i, (image, label, path) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
 
         if epoch == 0:
             warmup_lr_schedule(optimizer, i, config["warmup_steps"], config["warmup_lr"], config["init_lr"])
@@ -132,7 +132,7 @@ def evaluate(model, data_loader, device, clip_model, gpt_model, gpt_tokenizer):
     header = "Evaluation:"
     print_freq = 10
     losses, accs, clip_scores, perplexities = [], [], [], []
-    for image, label in metric_logger.log_every(data_loader, print_freq, header):
+    for image, label, path in metric_logger.log_every(data_loader, print_freq, header):
 
         image = image.to(device)
         label = label.to(device)
@@ -241,11 +241,11 @@ def main(args, config):
         print("Constant temperature enabled.")
 
     t_annealer = TemperatureAnnealer(temp_init=config["temperature"], mode=config["temperature_annealing"])
-
-    print("Start training")
+ 
     start_time = time.time()
     for epoch in range(start_epoch, config["max_epoch"]):
         if not args.evaluate:
+            print("Start training")
             if args.distributed:
                 train_loader.sampler.set_epoch(epoch)
 
@@ -254,6 +254,7 @@ def main(args, config):
             config["temperature"] = t_annealer
             train_loss = train(model, train_loader, optimizer, epoch, device, config)
 
+        print("Evaluating Model")
         val_loss, val_acc, val_clip_score, val_perplexity = evaluate(
             model_without_ddp, val_loader, device, clip_model, gpt_model, gpt_tokenizer
         )

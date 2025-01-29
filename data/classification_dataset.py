@@ -1,3 +1,5 @@
+from typing import Any, Tuple
+
 import os
 
 import torch
@@ -15,9 +17,26 @@ class GenericImageDataset(torchvision.datasets.ImageFolder):
             split_data_dir = os.path.join(root, "train")
         super(GenericImageDataset, self).__init__(root=split_data_dir, transform=transform)
 
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: (sample, target) where target is class_index of the target class.
+        """
+        path, target = self.samples[index]
+        sample = self.loader(path)
+        if self.transform is not None:
+            sample = self.transform(sample)
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return sample, target, path
+    
     def get_dataset_name(self):
         return self.dataset_name
-
+    
 
 def setup_image_classification_dataset(
     dataset_name, transform_train, transform_test, root, train_val_split_ratio=0.9, test_split="test"
