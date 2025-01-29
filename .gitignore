@@ -1,0 +1,8 @@
+data/StanfordCars/
+data/CelebA/
+.vscode
+output/
+__pycache__/
+data/__pycache__/
+pretrained/
+xbm_venv/
