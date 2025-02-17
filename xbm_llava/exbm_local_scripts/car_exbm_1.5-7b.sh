@@ -1,7 +1,5 @@
 #!/bin/bash
-echo "NODE_LIST:"$SLURM_JOB_NODELIST
-singularity exec --nv --bind /home/shinya.yamaguchi.mw/dataset:/dataset,$(pwd):/works ~/sif/pytorch-24.03-py3-llava.sif \
-torchrun --nproc_per_node=8 train_exbm.py \
+python xbm-llava/train_llava_exbm.py \
     --lora_enable True --lora_r 128 --lora_alpha 256 --mm_projector_lr 2e-5 \
     --model_name_or_path liuhaotian/llava-v1.5-7b \
     --version v1 \
@@ -15,9 +13,9 @@ torchrun --nproc_per_node=8 train_exbm.py \
     --group_by_modality_length True \
     --bf16 True \
     --output_dir ./result/car_exbm_1.5-7b \
-    --max_epoch 100 \
-    --per_device_train_batch_size 8 \
-    --per_device_eval_batch_size 8 \
+    --max_epoch 20 \
+    --per_device_train_batch_size 2 \
+    --per_device_eval_batch_size 2 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --learning_rate 2e-4 \
@@ -26,10 +24,10 @@ torchrun --nproc_per_node=8 train_exbm.py \
     --lr_decay_rate 0.9 \
     --warmup_lr 1e-6 \
     --warmup_step 50 \
-    --tf32 True \
+    --tf32 False \
     --model_max_length 2048 \
-    --gradient_checkpointing True \
-    --dataloader_num_workers 10 \
+    --gradient_checkpointing False \
+    --dataloader_num_workers 4 \
     --num_classes 196 \
     --max_decode_length 50 \
     --min_decode_length 20 \
@@ -37,4 +35,4 @@ torchrun --nproc_per_node=8 train_exbm.py \
     --lambda 0.01 \
     --temperature 10.0 \
     --temperature_annealing exp \
-    --distributed True \
+    --distributed False \

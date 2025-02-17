@@ -1,5 +1,8 @@
 #!/bin/bash
-torchrun --nproc_per_node=8 train_exbm.py \
+#echo "NODE_LIST:"$SLURM_JOB_NODELIST
+#singularity exec --nv --bind /home/shinya.yamaguchi.mw/dataset:/dataset,$(pwd):/works ~/sif/pytorch-24.03-py3-llava.sif \
+#torchrun --nproc_per_node=8 train_exbm.py \
+python train_exbm.py \
     --lora_enable True --lora_r 128 --lora_alpha 256 --mm_projector_lr 2e-5 \
     --model_name_or_path liuhaotian/llava-v1.5-7b \
     --version v1 \
@@ -35,4 +38,4 @@ torchrun --nproc_per_node=8 train_exbm.py \
     --lambda 0.01 \
     --temperature 10.0 \
     --temperature_annealing exp \
-    --distributed True \
+    --distributed False \

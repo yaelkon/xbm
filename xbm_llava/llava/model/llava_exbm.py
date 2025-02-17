@@ -68,7 +68,7 @@ def create_decoder(model_args, training_args, data_args):
 
     if "mpt" in model_args.model_name_or_path:
         config = transformers.AutoConfig.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
-        config.attn_config["attn_impl"] = "flash_attention_2"
+        config.attn_config["attn_impl"] = model_args.attention_layer_impl
         model = LlavaMptForCausalLM.from_pretrained(
             model_args.model_name_or_path,
             config=config,
@@ -78,7 +78,7 @@ def create_decoder(model_args, training_args, data_args):
         model = LlavaLlamaForCausalLM.from_pretrained(
             model_args.model_name_or_path,
             cache_dir=training_args.cache_dir,
-            attn_implementation="flash_attention_2",
+            attn_implementation=model_args.attention_layer_impl,
             torch_dtype=(torch.bfloat16 if training_args.bf16 else None),
         )
     if training_args.gradient_checkpointing:

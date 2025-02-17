@@ -66,6 +66,7 @@ class ModelArguments:
     max_decode_length: int = field(default=50)
     min_decode_length: int = field(default=20)
     fixed_caps: bool = field(default=False)
+    attention_layer_impl: str = field(default="flash_attention_2") # sdpa
 
 
 @dataclass
@@ -392,7 +393,7 @@ def main(model_args, data_args, training_args):
                     }
 
                 if epoch % 5 == 0:
-                    torch.save(save_obj, os.path.join(training_args.output_dir, f"checkpoint_{epoch}epoch.pth"))
+                    torch.save(save_obj, os.path.join(training_args.output_dir, f"checkpoint_{epoch}_epoch.pth"))
 
                 log_stats = {
                     "train_loss": train_loss,
