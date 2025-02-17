@@ -21,7 +21,6 @@ from transformers import AutoConfig, AutoModelForCausalLM, LlamaConfig, LlamaMod
 
 from transformers.modeling_outputs import CausalLMOutputWithPast
 from transformers.generation.utils import GenerateOutput
-from llava.constants import IGNORE_INDEX
 
 from ..llava_arch import LlavaMetaModel, LlavaMetaForCausalLM
 
@@ -41,6 +40,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
     config_class = LlavaConfig
 
     def __init__(self, config):
+        # config.mm_vision_tower = "openai/clip-vit-large-patch14"
         super(LlamaForCausalLM, self).__init__(config)
         self.model = LlavaLlamaModel(config)
         self.pretraining_tp = config.pretraining_tp

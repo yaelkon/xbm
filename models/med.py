@@ -1,37 +1,37 @@
 import math
-import os
-import pdb
-import warnings
-from dataclasses import dataclass
+# import os
+# import pdb
+# import warnings
+# from dataclasses import dataclass
 from typing import Optional, Tuple
 
 import torch
-import torch.distributed as dist
+# import torch.distributed as dist
 import torch.nn.functional as F
 import torch.utils.checkpoint
-from torch import Tensor, device, dtype, nn
+from torch import Tensor, device, nn
 from torch.nn import CrossEntropyLoss
 from transformers.activations import ACT2FN
-from transformers.file_utils import ModelOutput
-from transformers.generation_logits_process import LogitsProcessorList
-from transformers.generation_stopping_criteria import (
-    StoppingCriteriaList,
-    validate_stopping_criteria,
-)
-from transformers.generation_utils import (
-    SampleDecoderOnlyOutput,
-    SampleEncoderDecoderOutput,
-)
+# from transformers.file_utils import ModelOutput
+# from transformers.generation_logits_process import LogitsProcessorList
+# from transformers.generation_stopping_criteria import (
+#     StoppingCriteriaList,
+#     validate_stopping_criteria,
+# )
+# from transformers.generation_utils import (
+#     SampleDecoderOnlyOutput,
+#     SampleEncoderDecoderOutput,
+# )
 from transformers.modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
     BaseModelOutputWithPoolingAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
-    MaskedLMOutput,
-    MultipleChoiceModelOutput,
-    NextSentencePredictorOutput,
-    QuestionAnsweringModelOutput,
-    SequenceClassifierOutput,
-    TokenClassifierOutput,
+    # MaskedLMOutput,
+    # MultipleChoiceModelOutput,
+    # NextSentencePredictorOutput,
+    # QuestionAnsweringModelOutput,
+    # SequenceClassifierOutput,
+    # TokenClassifierOutput,
 )
 from transformers.modeling_utils import (
     PreTrainedModel,
