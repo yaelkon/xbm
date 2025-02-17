@@ -45,48 +45,18 @@ def create_dataset(data_args, min_scale=0.5):
             normalize,
         ]
     )
-    dataset = data_args.dataset
-    if dataset == "aircraft":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="Aircraft",
-            data_args=data_args,
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="/dataset/Aircraft",
-        )
-        return train_dataset, val_dataset, test_dataset
 
-    elif dataset == "bird":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="Bird",
-            data_args=data_args,
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="/dataset/CUB_200_2011",
-        )
-        return train_dataset, val_dataset, test_dataset
-
-    elif dataset == "car":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="Car",
-            data_args=data_args,
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="/dataset/StanfordCars",
-        )
-        return train_dataset, val_dataset, test_dataset
-
-    elif dataset == "imagenet":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="ImageNet",
-            data_args=data_args,
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="/dataset/imagenet",
-            train_val_split_ratio=0.99,
-            test_split="val",
-        )
-        return train_dataset, val_dataset, test_dataset
+    train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
+        data_args=data_args,
+        dataset_name=data_args.dataset,
+        root=data_args.root,
+        train_val_split_ratio=data_args.train_val_split_ratio,
+        test_split=data_args.test_split,
+        transform_train=transform_train,
+        transform_test=transform_test,
+    )
+    
+    return train_dataset, val_dataset, test_dataset
 
 
 def create_sampler(datasets, shuffles, num_tasks, global_rank):

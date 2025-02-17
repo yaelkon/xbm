@@ -8,7 +8,7 @@ from data.classification_dataset import setup_image_classification_dataset
 from transform.randaugment import RandomAugment
 
 
-def create_dataset(dataset, config, min_scale=0.5):
+def create_dataset(config, min_scale=0.5):
 
     normalize = transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
 
@@ -47,43 +47,16 @@ def create_dataset(dataset, config, min_scale=0.5):
         ]
     )
 
-    if dataset == "aircraft":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="Aircraft",
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="./data/Aircraft",
-        )
-        return train_dataset, val_dataset, test_dataset
+    train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
+        dataset_name=config["dataset"],
+        root=config["root"],
+        train_val_split_ratio=config["train_val_split_ratio"],
+        predefined_val=config["predefined_val"],
+        transform_train=transform_train,
+        transform_test=transform_test,
+    )
 
-    elif dataset == "bird":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="Bird",
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="./data/CUB_200_2011",
-        )
-        return train_dataset, val_dataset, test_dataset
-
-    elif dataset == "car":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="Car",
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="./data/StanfordCars",
-        )
-        return train_dataset, val_dataset, test_dataset
-
-    elif dataset == "imagenet":
-        train_dataset, val_dataset, test_dataset = setup_image_classification_dataset(
-            dataset_name="ImageNet",
-            transform_train=transform_train,
-            transform_test=transform_test,
-            root="/dataset/imagenet",
-            train_val_split_ratio=0.99,
-            test_split="val",
-        )
-        return train_dataset, val_dataset, test_dataset
+    return train_dataset, val_dataset, test_dataset
 
 
 def create_sampler(datasets, shuffles, num_tasks, global_rank):

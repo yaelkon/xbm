@@ -163,7 +163,7 @@ def main(args, config):
 
     #### Dataset ####
     print("Creating dataset")
-    train_dataset, val_dataset, test_dataset = create_dataset(config["dataset"], config, min_scale=0.2)
+    train_dataset, val_dataset, test_dataset = create_dataset(config, min_scale=0.2)
     print("number of training samples: %d" % len(train_dataset))
 
     num_tasks = utils.get_world_size()
